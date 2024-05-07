@@ -27,7 +27,12 @@ jobs:
         run: | 
           echo "version=$(jq -r .version package.json)-snapshot" >> "$GITHUB_OUTPUT"
           echo $GITHUB_OUTPUT
-
+          
+      - name: Get random artifact ID
+        id: get_artifact
+        run: | 
+          echo "IMAGE_TAG=$(date '+%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
 
   call-ci-workflow:
     needs: build #para traer el output
