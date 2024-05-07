@@ -1,9 +1,10 @@
-name: Crear imagen Docker
-
+name: CICD
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches: 
       - 'main'
+
 permissions:
   packages: write
   contents: read
@@ -44,3 +45,9 @@ jobs:
     secrets:
       dockeruser: ${{ secrets.DOCKERHUB_USERNAME }}
       dockerpassword: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  call-reusable-workflow:
+    uses: ./.github/workflows/workflow_CD_reusable.yml
+    with:
+      image-to-build: eperezstemdo/angulaimage:0.0.0-snapshot
+      artifactID: ${{ needs.build.outputs.artifactID }}
