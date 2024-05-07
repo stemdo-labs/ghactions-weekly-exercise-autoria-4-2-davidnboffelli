@@ -50,4 +50,7 @@ jobs:
           push: true
           tags: eperezstemdo/angulaimage:${{ inputs.tag }}
 
-         
+      - name: Upload image
+        uses: eperezstemdo/angulaimage:${{ inputs.tag }}
+        with:
+          image: inputs.artifactID
