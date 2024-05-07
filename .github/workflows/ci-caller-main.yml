@@ -16,6 +16,7 @@ jobs:
 
     outputs:
       tag: ${{ steps.get_version.outputs.version }} #tag será un output
+      artifactID: ${{ steps.get_artifact.outputs.version }} #ARTIFACTID
 
     steps:
         
@@ -27,7 +28,12 @@ jobs:
         run: | 
           echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
           echo $GITHUB_OUTPUT
-
+          
+      - name: Get random artifact ID
+        id: get_artifact
+        run: | 
+          echo "IMAGE_TAG=$(date '+%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
 
   call-ci-workflow:
     needs: build #para traer el output
