@@ -5,6 +5,9 @@ on:
       tag:
         required: true
         type: string
+      artifactid:
+        required: true
+        type: string
     secrets:
       dockeruser:
         required: true
