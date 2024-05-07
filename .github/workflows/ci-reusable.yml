@@ -5,6 +5,9 @@ on:
       tag:
         required: true
         type: string
+      artifactID:
+        required: true
+        type: string
     secrets:
       dockeruser:
         required: true
@@ -20,8 +23,8 @@ permissions:
 jobs:
    publish:
     runs-on: ubuntu-latest
-    #environment: 
-      #name: build
+    environment: 
+      name: build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,13 +41,16 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: eperezstemdo/git-action-project-davie-elisa/angulaimage
-          tags: eperezstemdo/angularimage:${{ inputs.tag }}
+          tags: eperezstemdo/angulaimage:${{ inputs.tag }}
           
       - name: Build container
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: eperezstemdo/angularimage:${{ inputs.tag }}
+          tags: eperezstemdo/angulaimage:${{ inputs.tag }}
 
-         
+      - name: Upload image
+        uses: eperezstemdo/angulaimage:${{ inputs.tag }}
+        with:
+          image: inputs.artifactID
