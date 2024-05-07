@@ -1,0 +1,39 @@
+name: Crear imagen Docke
+
+on:
+  push:
+    branches: 
+      - 'dev'
+permissions:
+  packages: write
+  contents: read
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    outputs:
+      tag: ${{ steps.get_version.outputs.version }} #tag será un output
+
+    steps:
+        
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Get version from package.json
+        id: get_version
+        run: | 
+          echo "version=$(jq -r .version package.json)-snapshot" >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
+
+
+  call-ci-workflow:
+    needs: build #para traer el output
+    uses: ./.github/workflows/ci-reusable.yml
+    with:
+      tag: ${{ needs.build.outputs.tag }} #input para el workflow reusable: la versión del proyecto
+    secrets:
+      dockeruser: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerpassword: ${{ secrets.DOCKERHUB_TOKEN }}
