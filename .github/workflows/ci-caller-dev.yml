@@ -16,6 +16,7 @@ jobs:
 
     outputs:
       tag: ${{ steps.get_version.outputs.version }} #tag será un output
+      artifactID: ${{ steps.get_artifact.outputs.version }} #ARTIFACTID
 
     steps:
         
