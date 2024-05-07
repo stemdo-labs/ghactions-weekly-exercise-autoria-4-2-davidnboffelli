@@ -5,7 +5,7 @@ on:
       tag:
         required: true
         type: string
-      artifactid:
+      artifactID:
         required: true
         type: string
     secrets:
