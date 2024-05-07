@@ -1,0 +1,11 @@
+name: Workflow CD caller
+on:
+  pull_request:
+    types: [closed]
+    branches: 
+      - 'main'
+jobs:     
+  call-reusable-workflow:
+    uses: ./.github/workflows/workflow_CD_reusable.yml
+    with:
+      image-to-build: eperezstemdo/angulaimage:latest

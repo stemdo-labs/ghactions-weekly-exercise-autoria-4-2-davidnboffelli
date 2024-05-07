@@ -1,0 +1,24 @@
+name: Workflow CD reusable
+on:
+  workflow_call:
+    inputs:
+      image-to-build:
+        required: true
+        type: string
+jobs:
+  deploy-curl:
+    runs-on: ubuntu-latest
+    environment:
+      name: deploy
+    steps:
+      - name: listado1
+        run: ls -a
+      - name: Deploy
+        run: |
+          docker run -d -p 8080:8080 ${{ inputs.image-to-build }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: listado2
+        run: ls -a
+      - name: Curl
+        run: curl localhost:8080
