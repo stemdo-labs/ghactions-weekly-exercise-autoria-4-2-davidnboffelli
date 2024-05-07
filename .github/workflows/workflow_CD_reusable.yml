@@ -5,20 +5,25 @@ on:
       image-to-build:
         required: true
         type: string
+      artifactID:
+        required: true
+        type: string
 jobs:
   deploy-curl:
     runs-on: ubuntu-latest
     #environment:
       #name: deploy
     steps:
-      - name: listado1
-        run: ls -a
+
       - name: Deploy
         run: |
           docker run -d -p 8080:8080 ${{ inputs.image-to-build }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: listado2
-        run: ls -a
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
+        
       - name: Curl
         run: curl localhost:8080
