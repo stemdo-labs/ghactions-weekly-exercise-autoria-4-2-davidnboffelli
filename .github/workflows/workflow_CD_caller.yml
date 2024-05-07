@@ -1,0 +1,31 @@
+name: Workflow CD caller
+on:
+  pull_request:
+    types: [closed]
+    branches: 
+      - 'main'
+permissions:
+  packages: write
+  contents: read
+  id-token: write
+  attestations: write
+jobs:    
+  jsonversion:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.get_version.outputs.version }}
+
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get version from package.json
+        id: get_version
+        run: | 
+          echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
+          
+  call-reusable-workflow:
+    needs: jsonversion
+    uses: ./.github/workflows/workflow_CD_reusable.yml
+    with:
+      image-to-build: eperezstemdo/angularimage:${{ needs.build.outputs.tag }}
